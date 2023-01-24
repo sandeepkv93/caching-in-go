@@ -15,6 +15,8 @@ jobs:
               uses: actions/setup-go@v2
               with:
                   go-version: 1.x
+            - name: Install coverage tool
+              run: go get -u github.com/wadey/gocov-html
             - name: Run tests
               run: |
                   for dir in $(find . -type d -not -path "./.git*" -not -path "./vendor*"); do
@@ -23,9 +25,18 @@ jobs:
                       go test -v -coverprofile=coverage.out $dir
                     fi
                   done
-            - name: Upload test coverage
-              if: always()
+            - name: Generate HTML coverage report
+              run: gocov-html coverage.out > coverage.html
+            - name: Upload HTML coverage report
               uses: actions/upload-artifact@v2
               with:
-                  name: coverage
-                  path: coverage.out
+                  name: coverage-report
+                  path: coverage.html
+            - name: Update README file
+              run: |
+                  echo "[![Coverage Status](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/{OWNER}/{REPO}/main/.github/workflows/coverage-report.json)](https://github.com/{OWNER}/{REPO}/actions?query=workflow%3A%22Go+Tests%22)" >> README.md
+                  git config --global user.email "github-actions[bot]@users.noreply.github.com"
+                  git config --global user.name "GitHub Actions"
+                  git add README.md
+                  git commit -m "Update coverage badge"
+                  git push
