@@ -1,9 +1,12 @@
-package cacheevictions
+package writethroughcache
 
-import "testing"
+import (
+	"testing"
+	"time"
+)
 
-func TestLRUCache(t *testing.T) {
-	cache := NewLRUCache(3)
+func TestWriteThroughCache(t *testing.T) {
+	cache := NewWriteThroughCache(time.Second * 5)
 	cache.Put("item1", "value1")
 	cache.Put("item2", "value2")
 	cache.Put("item3", "value3")
@@ -20,13 +23,6 @@ func TestLRUCache(t *testing.T) {
 		t.Error("Expected nil, got", value)
 	}
 
-	// Test adding an item that exceeds the max size
-	cache.Put("item4", "value4")
-	value, ok = cache.Get("item1")
-	if ok || value != nil {
-		t.Error("Expected nil, got", value)
-	}
-
 	// Test updating an existing item
 	cache.Put("item2", "newValue2")
 	value, ok = cache.Get("item2")
@@ -34,9 +30,9 @@ func TestLRUCache(t *testing.T) {
 		t.Error("Expected newValue2, got", value)
 	}
 
-	// Test removing the least recently used item
-	cache.Put("item5", "value5")
-	value, ok = cache.Get("item3")
+	// Test the expiration of a key
+	time.Sleep(time.Second * 6)
+	value, ok = cache.Get("item2")
 	if ok || value != nil {
 		t.Error("Expected nil, got", value)
 	}

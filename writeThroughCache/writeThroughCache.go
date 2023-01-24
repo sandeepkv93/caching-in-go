@@ -1,4 +1,4 @@
-package cachestrategies
+package writethroughcache
 
 import (
 	"sync"

@@ -1,4 +1,4 @@
-package cacheevictions
+package lrucache
 
 import (
 	"container/list"
