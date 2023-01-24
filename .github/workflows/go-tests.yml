@@ -16,7 +16,7 @@ jobs:
               with:
                   go-version: 1.x
             - name: Install coverage tool
-              run: go get -u github.com/wadey/gocov-html
+              run: go get -u github.com/axw/gocov/gocov@latest
             - name: Run tests
               run: |
                   for dir in $(find . -type d -not -path "./.git*" -not -path "./vendor*"); do
