@@ -1,4 +1,4 @@
-package lfucache
+package lfu_cache
 
 import (
 	"container/list"

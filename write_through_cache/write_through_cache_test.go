@@ -1,4 +1,4 @@
-package writethroughcache
+package write_through_cache
 
 import (
 	"testing"
