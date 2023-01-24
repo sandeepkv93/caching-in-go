@@ -15,8 +15,10 @@ jobs:
               uses: actions/setup-go@v2
               with:
                   go-version: 1.x
-            - name: Install coverage tool
-              run: go get -u github.com/axw/gocov/gocov@latest
+            - name: Install gocov and gocov-html
+              run: |
+                  go get -u github.com/axw/gocov/gocov
+                  go get -u github.com/matm/gocov-html
             - name: Run tests
               run: |
                   for dir in $(find . -type d -not -path "./.git*" -not -path "./vendor*"); do
@@ -25,13 +27,15 @@ jobs:
                       go test -v -coverprofile=coverage.out $dir
                     fi
                   done
+            - name: Convert coverage data to json format
+              run: gocov convert coverage.out | gocov report > .github/workflows/coverage-report.json
             - name: Generate HTML coverage report
-              run: gocov-html coverage.out > coverage.html
+              run: gocov-html .github/workflows/coverage-report.json > .github/workflows/coverage.html
             - name: Upload HTML coverage report
               uses: actions/upload-artifact@v2
               with:
                   name: coverage-report
-                  path: coverage.html
+                  path: .github/workflows/coverage.html
             - name: Update README file
               run: |
                   echo "[![Coverage Status](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/{OWNER}/{REPO}/main/.github/workflows/coverage-report.json)](https://github.com/{OWNER}/{REPO}/actions?query=workflow%3A%22Go+Tests%22)" >> README.md
