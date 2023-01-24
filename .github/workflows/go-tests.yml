@@ -15,10 +15,10 @@ jobs:
               uses: actions/setup-go@v2
               with:
                   go-version: 1.x
-            - name: Install gocov and gocov-html
-              run: |
-                  go install github.com/axw/gocov/gocov@latest
-                  go install github.com/matm/gocov-html/cmd/gocov-html@latest
+            # - name: Install gocov and gocov-html
+            #   run: |
+            #       go install github.com/axw/gocov/gocov@latest
+            #       go install github.com/matm/gocov-html/cmd/gocov-html@latest
             - name: Run tests
               run: |
                   for dir in $(find . -type d -not -path "./.git*" -not -path "./vendor*"); do
@@ -27,20 +27,20 @@ jobs:
                       go test -v -coverprofile=coverage.out $dir
                     fi
                   done
-            - name: Convert coverage data to json format
-              run: gocov convert coverage.out > coverage-report.json
-            - name: Generate HTML coverage report
-              run: gocov-html coverage-report.json > coverage.html
-            - name: Upload HTML coverage report
-              uses: actions/upload-artifact@v2
-              with:
-                  name: coverage-report
-                  path: coverage.html
-            - name: Update README file
-              run: |
-                  echo "[![Coverage Status](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/{OWNER}/{REPO}/main/.github/workflows/coverage-report.json)](https://github.com/{OWNER}/{REPO}/actions?query=workflow%3A%22Go+Tests%22)" >> README.md
-                  git config --global user.email "github-actions[bot]@users.noreply.github.com"
-                  git config --global user.name "GitHub Actions"
-                  git add README.md
-                  git commit -m "Update coverage badge"
-                  git push https://sandeepkv93:${{ secrets.PAT }}@github.com/${{ github.repository }}.git
+            # - name: Convert coverage data to json format
+            #   run: gocov convert coverage.out > coverage-report.json
+            # - name: Generate HTML coverage report
+            #   run: gocov-html coverage-report.json > coverage.html
+            # - name: Upload HTML coverage report
+            #   uses: actions/upload-artifact@v2
+            #   with:
+            #       name: coverage-report
+            #       path: coverage.html
+            # - name: Update README file
+            #   run: |
+            #       echo "[![Coverage Status](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/{OWNER}/{REPO}/main/.github/workflows/coverage-report.json)](https://github.com/{OWNER}/{REPO}/actions?query=workflow%3A%22Go+Tests%22)" >> README.md
+            #       git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            #       git config --global user.name "GitHub Actions"
+            #       git add README.md
+            #       git commit -m "Update coverage badge"
+            #       git push https://sandeepkv93:${{ secrets.PAT }}@github.com/${{ github.repository }}.git
