@@ -28,14 +28,14 @@ jobs:
                     fi
                   done
             - name: Convert coverage data to json format
-              run: gocov convert coverage.out | gocov report > .github/workflows/coverage-report.json
+              run: gocov convert coverage.out > coverage-report.json
             - name: Generate HTML coverage report
-              run: gocov-html .github/workflows/coverage-report.json > .github/workflows/coverage.html
+              run: gocov-html coverage-report.json > coverage.html
             - name: Upload HTML coverage report
               uses: actions/upload-artifact@v2
               with:
                   name: coverage-report
-                  path: .github/workflows/coverage.html
+                  path: coverage.html
             - name: Update README file
               run: |
                   echo "[![Coverage Status](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/{OWNER}/{REPO}/main/.github/workflows/coverage-report.json)](https://github.com/{OWNER}/{REPO}/actions?query=workflow%3A%22Go+Tests%22)" >> README.md
