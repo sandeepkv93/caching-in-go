@@ -17,8 +17,8 @@ jobs:
                   go-version: 1.x
             - name: Install gocov and gocov-html
               run: |
-                  go install github.com/axw/gocov/gocov
-                  go install github.com/matm/gocov-html
+                  go install github.com/axw/gocov/gocov@latest
+                  go install github.com/matm/gocov-html/cmd/gocov-html@latest
             - name: Run tests
               run: |
                   for dir in $(find . -type d -not -path "./.git*" -not -path "./vendor*"); do
