@@ -40,8 +40,9 @@ func (c *FIFOCache) Put(key string, value interface{}) {
 		c.list.MoveToFront(elem)
 		elem.Value.(*entry).value = value
 		return
-	} // If the key doesn't exist, add it to the front of the list and add it to the items map.
-	elem := c.list.PushFront(&entry{key, value})
+	}
+	// If the key doesn't exist, add it to the front of the list and add it to the items map.
+	elem := c.list.PushFront(&entry{key: key, value: value})
 	c.items[key] = elem
 
 	// If the cache is full, remove the oldest entry (the one at the back of the list).
